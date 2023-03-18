@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_design_practices_basic/src/dto/menu_option.dart';
 
@@ -5,7 +7,7 @@ class CardTable extends StatelessWidget {
   final List<MenuOption> menuOptions = [
     MenuOption('General', Icons.border_all, Colors.indigoAccent),
     MenuOption('Transport', Icons.directions_bus, Colors.purpleAccent),
-    MenuOption('Bills', Icons.monetization_on_outlined, Colors.yellowAccent),
+    MenuOption('Bills', Icons.monetization_on_outlined, Colors.deepPurpleAccent),
     MenuOption('Shopping', Icons.shopping_bag, Colors.deepOrangeAccent),
     MenuOption('Entertainment', Icons.movie, Colors.lightBlueAccent),
     MenuOption('Cloud', Icons.backup_sharp, Colors.greenAccent),
@@ -49,23 +51,46 @@ class _SingleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _SingleCardBackground(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          backgroundColor: menu.color,
+          radius: 30,
+          child: Icon(menu.icon, size: 35, color: Colors.white),
+        ),
+        const SizedBox(height: 10),
+        Text(menu.text, style: const TextStyle(color: Colors.white, fontSize: 18)),
+      ],
+    ));
+  }
+}
+
+class _SingleCardBackground extends StatelessWidget {
+  const _SingleCardBackground({
+    super.key,
+    required this.child,
+  });
+
+  final Column child;
+
+  @override
+  Widget build(BuildContext context) {
     var decoration =
         BoxDecoration(color: const Color.fromRGBO(62, 66, 107, .7), borderRadius: BorderRadius.circular(20));
     return Container(
-      height: 180,
       margin: const EdgeInsets.all(15),
-      decoration: decoration,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: menu.color,
-            radius: 30,
-            child: Icon(menu.icon, size: 35),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Container(
+            height: 180,
+            decoration: decoration,
+            child: child,
           ),
-          const SizedBox(height: 10),
-          Text(menu.text, style: const TextStyle(color: Colors.white, fontSize: 18)),
-        ],
+        ),
       ),
     );
   }
